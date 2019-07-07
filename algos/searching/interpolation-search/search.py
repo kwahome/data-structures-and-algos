@@ -19,16 +19,15 @@ def interpolation_search(arr, target):
         # probing the position with keeping uniform distribution in mind.
         position = low + int(((float(high - low) / (arr[high] - arr[low])) * (target - arr[low])))
 
-        # condition of target found
         if arr[position] == target:
+            # target found
             result = position
             break
 
-        # if target is larger, target is in upper part
         if arr[position] < target:
+            # if target is larger, target is in upper part
             low = position + 1
-
-            # if target is smaller, target is in lower part
         else:
+            # if target is smaller, target is in lower part
             high = position - 1
     return result
