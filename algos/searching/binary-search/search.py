@@ -1,7 +1,10 @@
+from algos.searching import UNSUCCESSFUL
+
+
 # iterative
 def ibinary_search(arr, target):
     length = len(arr)
-    unsuccessful, left, right = -1, 0, length-1
+    left, right = 0, length-1
 
     while left <= right:
         mid = left + (right - left)//2
@@ -13,17 +16,16 @@ def ibinary_search(arr, target):
             right = mid - 1
         else:
             return mid
-    return unsuccessful
+    return UNSUCCESSFUL
 
 
 # recursive
 def rbinary_search(arr, target, left=0, right=None):
-    unsuccessful = -1
     right = len(arr) - 1 if right is None else right
 
     # Base condition (search space is exhausted)
     if left > right:
-        return unsuccessful
+        return UNSUCCESSFUL
 
     mid = left + (right - left)//2
 
