@@ -1,10 +1,10 @@
+from algos import STRATEGIES
 from algos.searching import UNSUCCESSFUL
 
 
 # iterative
-def ibinary_search(arr, target):
-    length = len(arr)
-    left, right = 0, length-1
+def ibinary_search(arr, target, left=0, right=None):
+    right = len(arr) - 1 if right is None else right
 
     while left <= right:
         mid = left + (right - left)//2
@@ -38,3 +38,13 @@ def rbinary_search(arr, target, left=0, right=None):
     else:
         result = mid
     return result
+
+
+STRATEGY_FUNCTIONS = {
+    STRATEGIES.ITERATIVE: ibinary_search,
+    STRATEGIES.RECURSIVE: rbinary_search
+}
+
+
+def binary_search(arr, target, left=0, right=None, strategy=STRATEGIES.ITERATIVE):
+    return STRATEGY_FUNCTIONS[strategy](arr, target=target, left=left, right=right)
