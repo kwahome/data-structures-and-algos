@@ -40,11 +40,11 @@ def rbinary_search(arr, target, left=0, right=None):
     return result
 
 
-STRATEGY_FUNCTIONS = {
+STRATEGY_MAP = {
     STRATEGIES.ITERATIVE: ibinary_search,
     STRATEGIES.RECURSIVE: rbinary_search
 }
 
 
 def binary_search(arr, target, left=0, right=None, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_FUNCTIONS[strategy](arr, target=target, left=left, right=right)
+    return STRATEGY_MAP[strategy](arr, target=target, left=left, right=right)

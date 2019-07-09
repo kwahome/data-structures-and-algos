@@ -1,4 +1,6 @@
 import unittest
+import copy
+
 from algos.sorting import TEST_CASES
 from .sort import merge_sort
 
@@ -12,7 +14,10 @@ class MergeSortTests(unittest.TestCase):
 
     def test_sorting(self):
         for case in TEST_CASES["CASES"]:
+            unsorted_array = copy.deepcopy(case[0])
+            expected_output = copy.deepcopy(case[1])
+            ordering = case[2]
             self.assertEqual(
-                case[1],
-                merge_sort(case[0], order=case[2])
+                expected_output,
+                merge_sort(unsorted_array, order=ordering)
             )
