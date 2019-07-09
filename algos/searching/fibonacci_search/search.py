@@ -25,15 +25,16 @@ def fibonacci_search(arr, target):
     while fib_m > 1:
         # check if fib_2 is a valid location
         i = min(offset + fib_m2, length - 1)
+        item_i = arr[i]
         # if target is greater than the value at index fib_2, slice the sub array from offset to i
-        if arr[i] < target:
+        if item_i < target:
             fib_m = fib_m1
             fib_m1 = fib_m2
             fib_m2 = fib_m - fib_m1
             offset = i
 
         # if target is greater than the value at index fib_2, slice the sub-array after i+1
-        elif arr[i] > target:
+        elif item_i > target:
             fib_m = fib_m2
             fib_m1 = fib_m1 - fib_m2
             fib_m2 = fib_m - fib_m1
