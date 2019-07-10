@@ -1,5 +1,5 @@
 from algos import STRATEGIES
-from algos.sorting import ASCENDING, SORTING_OPERATORS
+from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 
 
 def imerge_sort(arr, order=ASCENDING):
@@ -9,10 +9,8 @@ def imerge_sort(arr, order=ASCENDING):
     The algorithm first merge chunk of length of 2, then merge chunks of length 4, then 8, 16, ...,
     until 2^k where 2^k is large than the length of the array
     """
-
-    # TODO: error handling, validation of order; ASC or DESC
     length = len(arr)
-
+    operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     unit = 1
     while unit <= length:
         for index in range(0, length, unit * 2):
@@ -20,7 +18,7 @@ def imerge_sort(arr, order=ASCENDING):
             mid = index + unit
 
             while left < mid < right:
-                if SORTING_OPERATORS[order.lower()](arr[mid], arr[left]):
+                if operator(arr[mid], arr[left]):
                     left += 1
                 else:
                     tmp = arr[mid]
@@ -32,22 +30,22 @@ def imerge_sort(arr, order=ASCENDING):
 
 
 def rmerge_sort(arr, order=ASCENDING):
-    # TODO: error handling, validation of order; ASC or DESC
     length = len(arr)
+    operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     if length > 1:
         mid = length // 2  # ceiling
 
         left = arr[:mid]
         right = arr[mid:]
 
-        merge_sort(left, order=order)
-        merge_sort(right, order=order)
+        rmerge_sort(left, order=order)
+        rmerge_sort(right, order=order)
 
         i = j = k = 0
 
         # copy data to temp arrays left[] and right[]
         while i < len(left) and j < len(right):
-            if SORTING_OPERATORS[order.lower()](left[i], right[j]):
+            if operator(left[i], right[j]):
                 arr[k] = right[j]
                 j += 1
             else:

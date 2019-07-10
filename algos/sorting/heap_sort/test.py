@@ -3,10 +3,10 @@ import copy
 
 from algos import STRATEGIES
 from algos.sorting import TEST_CASES
-from .sort import quick_sort
+from .sort import heap_sort
 
 
-class QuickSortTests(unittest.TestCase):
+class HeapSortTests(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -22,5 +22,5 @@ class QuickSortTests(unittest.TestCase):
                 ordering = case[2]
                 self.assertEqual(
                     expected_output,
-                    quick_sort(unsorted_array, order=ordering, strategy=strategy)
+                    heap_sort(unsorted_array, order=ordering, strategy=strategy)
                 )

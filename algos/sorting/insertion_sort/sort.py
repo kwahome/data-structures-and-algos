@@ -1,13 +1,13 @@
 from algos import STRATEGIES
-from algos.sorting import ASCENDING, SORTING_OPERATORS
+from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 
 
 def iinsertion_sort(arr, order=ASCENDING):
-    # TODO: error handling, validation of order; ASC or DESC
+    operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     for i in range(1, len(arr)):
         position = i - 1
         value = arr[i]
-        while position >= 0 and SORTING_OPERATORS[order.lower()](arr[position], value):
+        while position >= 0 and operator(arr[position], value):
             arr[position + 1] = arr[position]
             position -= 1
         arr[position + 1] = value
@@ -16,8 +16,8 @@ def iinsertion_sort(arr, order=ASCENDING):
 
 def rinsertion_sort(arr, order=ASCENDING, position=1):
     value = arr[position]
-
-    while position > 0 and SORTING_OPERATORS[order.lower()](arr[position - 1], value):
+    operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
+    while position > 0 and operator(arr[position - 1], value):
         arr[position] = arr[position - 1]
         position -= 1
     arr[position] = value
