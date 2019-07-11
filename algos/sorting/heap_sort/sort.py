@@ -6,18 +6,22 @@ from algos.sorting.heap_sort import HEAPS, HEAP_OPERATORS, HEAP_SORT_ORDERING
 def iheapify(arr, heap_type=HEAPS.MAX):
     """Iteratively build a heap of type `heap_type`
     """
+    divisor = 2.0 # 2.0 due to negative division rounding down in py 2
     operator = HEAP_OPERATORS[heap_type]
     for item in range(len(arr)):
         # check status of child (smaller/bigger) in respect to parent
-        if operator(arr[item], arr[int((item - 1) / 2)]):
+        parent = int((item - 1) / divisor)
+        if operator(arr[item], arr[parent]):
             child = item
 
             #: swap child and parent until desired status is achieved
             #: max heap -> child is smaller than parent
             #: min heap -> child is bigger than parent
-            while operator(arr[child], arr[int((child - 1) / 2)]):
-                arr[child], arr[int((child - 1) / 2)] = arr[int((child - 1) / 2)], arr[child]
-                child = int((child - 1) / 2)
+            parent = int((child - 1) / divisor)
+            while operator(arr[child], arr[parent]):
+                arr[child], arr[parent] = arr[parent], arr[child]
+                child = parent
+                parent = int((child - 1) / divisor)
     return arr
 
 
