@@ -47,4 +47,4 @@ STRATEGY_MAP = {
 
 
 def binary_search(arr, target, left=0, right=None, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP[strategy](arr, target=target, left=left, right=right)
+    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr, target, left, right)

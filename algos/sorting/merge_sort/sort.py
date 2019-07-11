@@ -73,4 +73,4 @@ STRATEGY_MAP = {
 
 
 def merge_sort(arr, order=ASCENDING, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP[strategy](arr=arr, order=order)
+    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr=arr, order=order)
