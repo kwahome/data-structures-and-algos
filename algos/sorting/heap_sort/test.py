@@ -15,7 +15,7 @@ class HeapSortTests(unittest.TestCase):
 
     def test_sorting(self):
         for strategy in [STRATEGIES.ITERATIVE, STRATEGIES.RECURSIVE]:
-            for case in TEST_CASES["CASES"]:
+            for case in TEST_CASES:
                 # deepcopy objects to maintain tests cases as they are mutated with each loop
                 unsorted_array = copy.deepcopy(case[0])
                 expected_output = copy.deepcopy(case[1])

@@ -3,47 +3,55 @@ from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 
 
 def imerge_sort(arr, order=ASCENDING):
-    """In-place merge sort of array without recursion.
-    The basic idea is to avoid the recursive call while using iterative solution.
+    """Iterative implementation of merge sort.
 
-    The algorithm first merge chunk of length of 2, then merge chunks of length 4, then 8, 16, ...,
-    until 2^k where 2^k is large than the length of the array
+    The basic idea is to avoid the recursive call by using iteration to sort.
+    The algorithm first merge chunk of length of 2, then merge chunks of length 4,
+    then 8, 16, ..., until 2^k where 2^k is large than the length of the array
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
     """
     length = len(arr)
     operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
-    unit = 1
-    while unit <= length:
-        for index in range(0, length, unit * 2):
-            left, right = index, min(length, index + 2 * unit)
-            mid = index + unit
+    position = 1
+    while position <= length:
+        for index in range(0, length, position * 2):
+            left, right = index, min(length, index + 2 * position)
+            mid = index + position
 
             while left < mid < right:
                 if operator(arr[mid], arr[left]):
                     left += 1
                 else:
-                    tmp = arr[mid]
+                    value = arr[mid]
                     arr[left + 1: mid + 1] = arr[left:mid]
-                    arr[left] = tmp
-                    left, mid, mid = left + 1, mid + 1, mid + 1
-        unit *= 2
+                    arr[left] = value
+                    left, mid = left + 1, mid + 1
+        position *= 2
     return arr
 
 
 def rmerge_sort(arr, order=ASCENDING):
+    """Recursive implementation of merge sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
+    """
     length = len(arr)
     operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     if length > 1:
-        mid = length // 2  # ceiling
-
-        left = arr[:mid]
-        right = arr[mid:]
+        mid = length // 2  #: ceiling
+        left, right = arr[:mid], arr[mid:]
 
         rmerge_sort(left, order=order)
         rmerge_sort(right, order=order)
 
         i = j = k = 0
 
-        # copy data to temp arrays left[] and right[]
+        #: copy data to temp arrays left[] and right[]
         while i < len(left) and j < len(right):
             if operator(left[i], right[j]):
                 arr[k] = right[j]
@@ -53,12 +61,12 @@ def rmerge_sort(arr, order=ASCENDING):
                 i += 1
             k += 1
 
-        # checking if any element was left
+        #: checking if any element was left in the left sub-array
         while i < len(left):
             arr[k] = left[i]
             i += 1
             k += 1
-
+        #: checking if any element was left in the right sub-array
         while j < len(right):
             arr[k] = right[j]
             j += 1
@@ -73,4 +81,4 @@ STRATEGY_MAP = {
 
 
 def merge_sort(arr, order=ASCENDING, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr=arr, order=order)
+    return STRATEGY_MAP.get(strategy, imerge_sort)(arr=arr, order=order)

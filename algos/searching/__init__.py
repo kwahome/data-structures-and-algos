@@ -1,14 +1,23 @@
 UNSUCCESSFUL = -1
-TEST_CASES = {
-    "SORTED_SEARCH_ARRAY": [1, 10, 20, 47, 59, 63, 75, 88, 99, 107, 120, 133],
-    "CASES": (
-        (1, 0),
-        (10, 1),
-        (47, 3),
-        (88, 7),
-        (99, 8),
-        (133, 11),
-        (147, UNSUCCESSFUL),
-        (-1, UNSUCCESSFUL)
-    )
-}
+
+SORTED_ARRAY = [1, 10, 20, 47, 59, 63, 75, 88, 99, 107, 120, 133, 139, 144]
+
+TEST_CASES = (
+    #: (SEARCH ARRAY, TARGET , EXPECTED OUTPUT)
+    (SORTED_ARRAY, 1, 0),
+    (SORTED_ARRAY, 10, 1),
+    (SORTED_ARRAY, 20, 2),
+    (SORTED_ARRAY, 47, 3),
+    (SORTED_ARRAY, 59, 4),
+    (SORTED_ARRAY, 63, 5),
+    (SORTED_ARRAY, 75, 6),
+    (SORTED_ARRAY, 88, 7),
+    (SORTED_ARRAY, 99, 8),
+    (SORTED_ARRAY, 107, 9),
+    (SORTED_ARRAY, 120, 10),
+    (SORTED_ARRAY, 133, 11),
+    (SORTED_ARRAY, 139, 12),
+    (SORTED_ARRAY, 144, 13),
+    (SORTED_ARRAY, 147, UNSUCCESSFUL),
+    (SORTED_ARRAY, -1, UNSUCCESSFUL),
+)

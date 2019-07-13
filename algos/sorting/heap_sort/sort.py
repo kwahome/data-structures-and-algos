@@ -3,10 +3,16 @@ from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 from algos.sorting.heap_sort import HEAPS, HEAP_OPERATORS, HEAP_SORT_ORDERING
 
 
+#: iterative implementation
 def iheapify(arr, heap_type=HEAPS.MAX):
     """Iteratively build a heap of type `heap_type`
+
+    :param arr: input list
+    :param heap_type: type of heap to build i.e "min" or "max"
+    :return: heap of type `heap_type`
     """
-    divisor = 2.0 # 2.0 due to negative division rounding down in py 2
+
+    divisor = 2.0  # 2.0 due to negative division rounding down in py 2
     operator = HEAP_OPERATORS[heap_type]
     for item in range(len(arr)):
         # check status of child (smaller/bigger) in respect to parent
@@ -26,7 +32,12 @@ def iheapify(arr, heap_type=HEAPS.MAX):
 
 
 def iheap_sort(arr, order=ASCENDING):
-    # TODO: error handling, validation of order; ASC or DESC
+    """Iterative implementation of heap sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
+    """
     length = len(arr)
 
     # build a max or min heap in respect of sorting order
@@ -60,8 +71,15 @@ def iheap_sort(arr, order=ASCENDING):
     return arr
 
 
+#: recursive implementation
 def rheapify(arr, length, root, heap_type=HEAPS.MAX):
-    """Recursively heapify subtree rooted at root.
+    """Recursively build a heap of type `heap_type`
+
+    :param arr: input list
+    :param length: length of input list
+    :param root: root of the heap
+    :param heap_type: type of heap to build i.e "min" or "max"
+    :return: heap of type `heap_type`
     """
     largest = root  # initialize largest as root
     left = 2 * root + 1  # left = 2 * i + 1
@@ -80,12 +98,18 @@ def rheapify(arr, length, root, heap_type=HEAPS.MAX):
     # change root, if needed
     if largest != root:
         arr[root], arr[largest] = arr[largest], arr[root]  # swap
-        # heapify the root.
+        # recursively heapify the root.
         rheapify(arr, length, largest, heap_type=heap_type)
+    return arr
 
 
 def rheap_sort(arr, order=ASCENDING):
-    # TODO: error handling, validation of order; ASC or DESC
+    """Recursive implementation of heap sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
+    """
     length = len(arr)
 
     heap_type = HEAP_SORT_ORDERING[order.lower()]
@@ -108,4 +132,4 @@ STRATEGY_MAP = {
 
 
 def heap_sort(arr, order=ASCENDING, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr=arr, order=order)
+    return STRATEGY_MAP.get(strategy, heap_sort)(arr=arr, order=order)

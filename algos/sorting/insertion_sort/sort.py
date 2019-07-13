@@ -3,6 +3,12 @@ from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 
 
 def iinsertion_sort(arr, order=ASCENDING):
+    """Iterative implementation of insertion sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
+    """
     operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     for i in range(1, len(arr)):
         position = i - 1
@@ -15,6 +21,13 @@ def iinsertion_sort(arr, order=ASCENDING):
 
 
 def rinsertion_sort(arr, order=ASCENDING, position=1):
+    """Recursive implementation of heap sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :param position: sorting position
+    :return: list sorted in the order defined
+    """
     value = arr[position]
     operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     while position > 0 and operator(arr[position - 1], value):
@@ -34,4 +47,4 @@ STRATEGY_MAP = {
 
 
 def insertion_sort(arr, order=ASCENDING, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr=arr, order=order)
+    return STRATEGY_MAP.get(strategy, insertion_sort)(arr=arr, order=order)

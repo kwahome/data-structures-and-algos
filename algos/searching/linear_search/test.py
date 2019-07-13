@@ -1,4 +1,5 @@
 import unittest
+
 from algos.searching import TEST_CASES
 from .search import linear_search
 
@@ -11,8 +12,8 @@ class LinearSearchTests(unittest.TestCase):
         pass
 
     def test_searching(self):
-        for case in TEST_CASES["CASES"]:
+        for case in TEST_CASES:
             self.assertEqual(
-                case[1],
-                linear_search(TEST_CASES["SORTED_SEARCH_ARRAY"], case[0])
+                case[2],
+                linear_search(case[0], case[1])
             )

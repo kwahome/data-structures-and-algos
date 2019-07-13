@@ -3,8 +3,14 @@ from algos.sorting import ASCENDING, GREATER_THAN, SORTING_OPERATORS
 
 
 def iquick_sort(arr, order=ASCENDING):
+    """Iterative implementation of quick sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :return: list sorted in the order defined
+    """
+
     return rquick_sort(arr, order=order)
-    # # TODO: error handling, validation of order; ASC or DESC
     # length = len(arr)
     # print("\n")
     # print("new sort")
@@ -59,24 +65,32 @@ def iquick_sort(arr, order=ASCENDING):
 
 
 def rquick_sort(arr, order=ASCENDING, low=0, high=None):
+    """Recursive implementation of quick sort.
+
+    :param arr: input list
+    :param order: sorting order i.e "asc" or "desc"
+    :param low: smallest item
+    :param high: largest item
+    :return: list sorted in the order defined
+    """
     length = len(arr)
     high = length - 1 if high is None else high
     operator = SORTING_OPERATORS.get(order.lower(), GREATER_THAN)
     if low < high:
-        i = low - 1
+        start = low - 1
         pivot = arr[high]
-        for j in range(low, high):
-            # if current element is smaller than or equal to pivot
-            if operator(pivot, arr[j]) or pivot == arr[j]:
-                # increment index of smaller element
-                i += 1
-                arr[i], arr[j] = arr[j], arr[i]
-        arr[i+1], arr[high] = arr[high], arr[i+1]
+        for item in range(low, high):
+            #: if current element is smaller than or equal to pivot
+            if operator(pivot, arr[item]) or pivot == arr[item]:
+                #: increment index of smaller element
+                start += 1
+                arr[start], arr[item] = arr[item], arr[start]
+        arr[start+1], arr[high] = arr[high], arr[start+1]
 
-        # arr[partitioning_index] is now at right place
-        partitioning_index = i + 1
+        #: arr[partitioning_index] is now at right place
+        partitioning_index = start + 1
 
-        # separately sort elements before partition and after partition
+        #: separately sort elements before partition and after partition
         rquick_sort(arr, order=order, low=low, high=partitioning_index - 1)
         rquick_sort(arr, order=order, low=partitioning_index + 1, high=high)
     return arr
@@ -89,5 +103,5 @@ STRATEGY_MAP = {
 
 
 def quick_sort(arr, order=ASCENDING, strategy=STRATEGIES.ITERATIVE):
-    return STRATEGY_MAP.get(strategy, STRATEGIES.ITERATIVE)(arr=arr, order=order)
+    return STRATEGY_MAP.get(strategy, iquick_sort)(arr=arr, order=order)
 
