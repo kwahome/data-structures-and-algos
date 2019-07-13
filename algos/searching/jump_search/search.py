@@ -32,7 +32,7 @@ def ijump_search(arr, target):
         while arr[start] < target:
             start += 1
 
-            #: if we reached next block or end of array, element is not present.
+            #: if we reached next grid or end of array, element is not present.
             if start == min(step, length):
                 result = UNSUCCESSFUL
                 break
@@ -56,6 +56,7 @@ def rjump_search(arr, target, start=0, end=None):
     length = len(arr)
 
     end = length if end is None else end
+
     #: finding grid size to be jumped
     step = math.sqrt(end)
 
@@ -72,9 +73,12 @@ def rjump_search(arr, target, start=0, end=None):
         #: element is found
         if arr[start] == target:
             result = start
-        else:
+        elif arr[start] < target:
             #: recursively jump search for target in grid between `start` and `end`
             result = rjump_search(arr, target, start=start + 1, end=end)
+        elif arr[start] > target:
+            #: recursively jump search for target in grid between `start` and `end`
+            result = rjump_search(arr, target, start=start + 1, end=end - 1)
     return result
 
 
