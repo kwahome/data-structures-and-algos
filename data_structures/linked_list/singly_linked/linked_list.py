@@ -1,104 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-AFTER = "after"
-BEFORE = "before"
-BEGINNING = "beginning"
-CURRENT = "with"
-END = "end"
+from data_structures.linked_list import BaseNode, InsertPositions, LinkedList, SearchPositions
 
 
-class InsertPositions:
-    """Class implementing an enum construct describing linked list insertion positions.
-    """
-    AFTER = AFTER
-    BEFORE = BEFORE
-    BEGINNING = BEGINNING
-    END = END
-
-
-class SearchPositions:
-    """Class implementing an enum construct describing linked list search positions.
-    """
-    AFTER = AFTER
-    BEFORE = BEFORE
-    CURRENT = CURRENT
-
-
-class Node(object):
-    """Class implementing a `node` in a linked list
+class Node(BaseNode):
+    """Class implementing a `node` in a singly linked list
 
     Each node contains following parts:
         - value
         - a pointer to the next node
     """
-
-    def __init__(self, data=None, next_node=None):
-        self.value = data
-        self.next = next_node
-
-    def get_data(self):
-        """Getter for node value.
-
-        :return: data value
-        """
-        return self.value
-
-    def set_data(self, data):
-        """Setter for node value.
-
-        :param data:
-        :return:
-        """
-        self.value = data
-
-    def get_next(self):
-        """Getter for next node pointed at.
-
-        :return: next node
-        """
-        return self.next
-
-    def set_next(self, node):
-        """Setter for next node to point at.
-
-        :param node: next node
-        :return:
-        """
-        self.next = node
+    pass
 
 
-class SinglyLinkedList(object):
+class SinglyLinkedList(LinkedList):
     """Singly linked list that can only be traversed in a forward direction.
 
     """
-    def __init__(self, head=None):
-        self.head = head
-
-    def get_head(self):
-        """Getter for the linked list head node.
-
-        :return: node at head
-        """
-        return self.head
-
-    def set_head(self, node):
-        """Setter for the linked list head node.
-
-        :param node: node at head of linked list
-        :return:
-        """
-        self.head = node
-
-    def is_empty(self):
-        """Method to check whether a linked list is empty.
-
-        A linked list will be empty if it has no head as it must always start from the head.
-
-        :return: True or False
-        """
-        return self.head is None
-
     def _insert_before(self, data, reference_value):
         """Method to insert a node before the node with the `reference_value` in the linked list.
 
@@ -349,45 +267,3 @@ class SinglyLinkedList(object):
         next_node = current.get_next()
         if found and next_node is not None:
             previous.set_next(current.get_next())
-
-    def size(self):
-        """Method to determine the number of nodes in a linked list.
-
-        The size method is very simple, it basically counts nodes until it can’t find any more, and
-        returns how many nodes it found. The method starts at the head node, travels down the line
-        of nodes until it reaches the end (the current will be None when it reaches the end) while
-        keeping track of how many nodes it has seen.
-
-        The time complexity of size is O(n) because each time the method is called it will always
-        visit every node in the list but only interact with them once, so n * 1 operations.
-
-        :return: number of nodes found
-        """
-        current = self.head
-        count = 0
-        while current:
-            count += 1
-            current = current.get_next()
-        return count
-
-    def to_array(self):
-        """Method to traverse linked list and return an array of all it's items.
-
-        :return: array
-        """
-        array = []
-        current = self.head
-        while current:
-            array.append(current.get_data())
-            current = current.get_next()
-        return array
-
-    def traverse(self):
-        """Method to traverse linked list and print out all it's items.
-
-        :return:
-        """
-        current = self.head
-        while current:
-            print(current.get_data())
-            current = current.get_next()

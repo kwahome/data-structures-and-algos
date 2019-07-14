@@ -4,17 +4,17 @@ A linked list is a linear data structure, in which the elements are not
 stored at contiguous memory locations. The elements in a linked list are
 linked using pointers as shown in the below image:
 
-![binary tree](../../res/img/linked-list/linked-list.png)
+![binary tree](../../../res/img/linked-list/linked-list.png)
 
 A linked list consists of `nodes`:
 
-![binary tree](../../res/img/linked-list/linked-list-node.png)
+![binary tree](../../../res/img/linked-list/linked-list-node.png)
 
 Each node consists of a `value` and a `pointer` to another node:
 
-![binary tree](../../res/img/linked-list/linked-list-node-value.png)
+![binary tree](../../../res/img/linked-list/linked-list-node-value.png)
 
-![binary tree](../../res/img/linked-list/linked-list-node-pointer.png)
+![binary tree](../../../res/img/linked-list/linked-list-node-pointer.png)
 
 The starting node of a linked list is referred to as the `head`.
 
