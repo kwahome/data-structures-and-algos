@@ -90,6 +90,15 @@ class SinglyLinkedList(object):
         """
         self.head = node
 
+    def is_empty(self):
+        """Method to check whether a linked list is empty.
+
+        A linked list will be empty if it has no head as it must always start from the head.
+
+        :return: True or False
+        """
+        return self.head is None
+
     def _insert_before(self, data, reference_value):
         """Method to insert a node before the node with the `reference_value` in the linked list.
 
@@ -104,7 +113,7 @@ class SinglyLinkedList(object):
         new_node = Node(data=data)
 
         #: if linked list is empty, reference_value won't exist hence set new_node as head
-        if not self.head:
+        if self.is_empty():
             self.set_head(new_node)
             return
 
@@ -116,7 +125,7 @@ class SinglyLinkedList(object):
         else:
             #: if node with reference_value is not found, default to inserting to the front of the
             #: linked list as it's a constant time operation
-            self._insert_beginning(data)
+            self.insert(data, position=InsertPositions.BEGINNING)
 
     def _insert_after(self, data, reference_value):
         """Method to insert a node after the node with the `reference_value` in the linked list.
@@ -132,7 +141,7 @@ class SinglyLinkedList(object):
         new_node = Node(data=data)
 
         #: if linked list is empty, reference_value won't exist hence set new_node as head
-        if not self.head:
+        if self.is_empty():
             self.set_head(new_node)
             return
 
@@ -144,7 +153,7 @@ class SinglyLinkedList(object):
         else:
             #: if node with reference_value is not found, default to inserting to the front of the
             #: linked list as it's a constant time operation
-            self._insert_beginning(data)
+            self.insert(data, position=InsertPositions.BEGINNING)
 
     def _insert_beginning(self, data, reference_value=None):
         """Method to insert a node at the beginning of the linked list
@@ -199,7 +208,37 @@ class SinglyLinkedList(object):
         """
         getattr(self, "_insert_{}".format(position), self._insert_beginning)(data, reference_value)
 
+    def push(self, data):
+        """Method to insert a node at the beginning of a linked list; hence the semantics.
+
+        :param data: data item to be inserted into the linked list
+        :return:
+        """
+        self.insert(data, position=InsertPositions.BEGINNING)
+
+    def append(self, data):
+        """Method to insert a node at the end of a linked list; hence the semantics.
+
+        :param data: data item to be inserted into the linked list
+        :return:
+        """
+        self.insert(data, position=InsertPositions.END)
+
     def _node_before(self, data):
+        """Method to traverse through a linked list whilst looking for the node with the data item
+        then determine the node pointing to it i.e node before it.
+
+        Search is linear beginning at the head of the linked list thus in the event a data item
+        appears more than once in the list, the first encountered is referenced.
+
+        Search is actually very similar to size, but instead of traversing the whole list of nodes
+        it checks at each stop to see whether the current node has the requested data.
+
+        The time complexity of search is O(n) in the worst case.
+
+        :param data: item to look for in the linked list
+        :return: node after the node holding the data item
+        """
         current = self.head
         previous = None
         found = False
@@ -215,26 +254,14 @@ class SinglyLinkedList(object):
             previous = None
         return previous
 
-    def _node_after(self, data):
-        """Method to traverse through a linked list whilst looking for an item.
-
-        Search is actually very similar to size, but instead of traversing the whole list of nodes
-        it checks at each stop to see whether the current node has the requested data and if so,
-        returns the node holding that data.
-
-        The time complexity of search is O(n) in the worst case.
-
-        :param data: item to look for in the linked list
-        :return: node after the node holding the data item
-        """
-        return self._node_with(data).get_next()
-
     def _node_with(self, data):
         """Method to traverse through a linked list whilst looking for an item.
 
+        Search is linear beginning at the head of the linked list thus in the event a data item
+        appears more than once in the list, the first encountered is referenced.
+
         Search is actually very similar to size, but instead of traversing the whole list of nodes
-        it checks at each stop to see whether the current node has the requested data and if so,
-        returns the node holding that data.
+        it checks at each stop to see whether the current node has the requested data.
 
         The time complexity of search is O(n) in the worst case.
 
@@ -250,17 +277,34 @@ class SinglyLinkedList(object):
                 current = current.get_next()
         return current
 
+    def _node_after(self, data):
+        """Method to traverse through a linked list whilst looking for the node with the data item
+        then determine the node it points to i.e node after it.
+
+        Search is linear beginning at the head of the linked list thus in the event a data item
+        appears more than once in the list, the first encountered is referenced.
+
+        Search is actually very similar to size, but instead of traversing the whole list of nodes
+        it checks at each stop to see whether the current node has the requested data.
+
+        The time complexity of search is O(n) in the worst case.
+
+        :param data: item to look for in the linked list
+        :return: node after the node holding the data item
+        """
+        return self._node_with(data).get_next()
+
     def search(self, data, position=SearchPositions.CURRENT):
         """Method to traverse through a linked list whilst looking for an item.
 
         This method returns either the node holding the data item, the node before or the node after
         depending on the configuration chosen. It defaults to returning the node holding the item.
 
+        Search is linear beginning at the head of the linked list thus in the event a data item
+        appears more than once in the list, the first encountered is referenced.
+
         Search is actually very similar to size, but instead of traversing the whole list of nodes
-        it checks at each stop to see whether the current node has the requested data and if so,
-        returns the node holding that data. If the method goes through the entire list but still
-        has not found the data, it raises a value error and notifies the user that the data is not
-        in the list.
+        it checks at each stop to see whether the current node has the requested data.
 
         The time complexity of search is O(n) in the worst case.
 
@@ -268,7 +312,7 @@ class SinglyLinkedList(object):
         :param position: node relative to the node holding data item to return
         :return: node holding the data item
         """
-        return getattr(self, "_node_{}".format(position), self._insert_beginning)(data)
+        return getattr(self, "_node_{}".format(position), self._node_with)(data)
 
     def delete(self, data):
         """Method to traverse through a linked list whilst looking for an item to delete it.

@@ -105,14 +105,14 @@ class SinglyLinkedListTests(unittest.TestCase):
 
     def test_inserting_at_beginning(self):
         self.assertEqual(0, self.linked_list.size())
-        self.linked_list.insert(self.data)
+        self.linked_list.push(self.data)
         self.assertEqual(1, self.linked_list.size())
         self.assertEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([1], self.linked_list.to_array())
 
         # insert another item
         self.data = 2
-        self.linked_list.insert(self.data)
+        self.linked_list.push(self.data)
         self.assertEqual(2, self.linked_list.size())
         self.assertEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([2, 1], self.linked_list.to_array())
@@ -120,14 +120,14 @@ class SinglyLinkedListTests(unittest.TestCase):
     def test_inserting_at_end(self):
         self.position = InsertPositions.END
         self.assertEqual(0, self.linked_list.size())
-        self.linked_list.insert(self.data, position=self.position)
+        self.linked_list.append(self.data)
         self.assertEqual(1, self.linked_list.size())
         self.assertEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([1], self.linked_list.to_array())
 
         # insert another item
         self.data = 2
-        self.linked_list.insert(self.data, position=self.position)
+        self.linked_list.append(self.data)
         self.assertEqual(2, self.linked_list.size())
         self.assertNotEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([1, 2], self.linked_list.to_array())
