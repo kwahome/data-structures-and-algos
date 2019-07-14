@@ -9,4 +9,4 @@ class BinaryTreeTests(unittest.TestCase):
         pass
 
     def test_tree(self):
-            self.assertEqual()
+        pass
