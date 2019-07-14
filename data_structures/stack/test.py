@@ -1,7 +1,7 @@
 import unittest
 
 
-class BinarySearchTreeTests(unittest.TestCase):
+class StackTests(unittest.TestCase):
     def setUp(self):
         pass
 
