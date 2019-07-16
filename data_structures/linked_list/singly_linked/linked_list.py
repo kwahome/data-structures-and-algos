@@ -101,15 +101,10 @@ class SinglyLinkedList(LinkedList):
         :return:
         """
         new_node = Node(data=data)
-        if not self.head:
+        if self.is_empty():
             self.set_head(new_node)
             return
-
-        last_node = self.head
-        #: seek the last node in the linked list first
-        while last_node.get_next():
-            last_node = last_node.get_next()
-        last_node.set_next(new_node)
+        self.get_tail().set_next(new_node)
 
     def insert(self, data, position=InsertPositions.BEGINNING, reference_value=None):
         """Method to positionally insert a node into the linked list.
@@ -124,7 +119,9 @@ class SinglyLinkedList(LinkedList):
         :param reference_value: reference value for inserting between nodes i.e. after or before
         :return:
         """
-        getattr(self, "_insert_{}".format(position), self._insert_beginning)(data, reference_value)
+        getattr(self, "_insert_{}".format(position.lower()), self._insert_beginning)(
+            data, reference_value
+        )
 
     def push(self, data):
         """Method to insert a node at the beginning of a linked list; hence the semantics.
@@ -210,7 +207,11 @@ class SinglyLinkedList(LinkedList):
         :param data: item to look for in the linked list
         :return: node after the node holding the data item
         """
-        return self._node_with(data).get_next()
+        current = self._node_with(data)
+        next_node = None
+        if current:
+            next_node = current.get_next()
+        return next_node
 
     def search(self, data, position=SearchPositions.CURRENT):
         """Method to traverse through a linked list whilst looking for an item.
@@ -230,7 +231,7 @@ class SinglyLinkedList(LinkedList):
         :param position: node relative to the node holding data item to return
         :return: node holding the data item
         """
-        return getattr(self, "_node_{}".format(position), self._node_with)(data)
+        return getattr(self, "_node_{}".format(position.lower()), self._node_with)(data)
 
     def delete(self, data):
         """Method to traverse through a linked list whilst looking for an item to delete it.
@@ -261,9 +262,9 @@ class SinglyLinkedList(LinkedList):
                 previous = current
                 current = current.get_next()
 
-        if previous is None:
-            self.head = current.get_next()
-
         next_node = current.get_next()
-        if found and next_node is not None:
-            previous.set_next(current.get_next())
+        if not previous:
+            self.head = next_node
+
+        if previous:
+            previous.set_next(next_node)

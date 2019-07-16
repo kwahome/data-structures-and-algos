@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# https://medium.com/@kojinoshiba/data-structures-in-python-series-1-linked-lists-d9f848537b4d
 
 import abc
 import six
@@ -109,6 +110,16 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
         :return: True or False
         """
         return self.head is None
+
+    def get_tail(self):
+        """Method to seek and return the last node in the linked list (tail).
+
+        :return: last node in the linked list
+        """
+        last_node = self.head
+        while last_node and last_node.get_next():
+            last_node = last_node.get_next()
+        return last_node
 
     def size(self):
         """Method to determine the number of nodes in a linked list.

@@ -93,7 +93,6 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertListEqual([2, 1], self.linked_list.to_array())
 
     def test_inserting_at_end(self):
-        self.position = InsertPositions.END
         self.assertEqual(0, self.linked_list.size())
         self.linked_list.append(self.data)
         self.assertEqual(1, self.linked_list.size())
@@ -138,10 +137,56 @@ class SinglyLinkedListTests(unittest.TestCase):
             None, self.linked_list.search(self.previous, position=SearchPositions.AFTER)
         )
 
+        #: search non-existing item
+        self.assertEqual(
+            None, self.linked_list.search("does not exist")
+        )
+        #: search for node after
+        self.assertEqual(
+            None, self.linked_list.search("does not exist", position=SearchPositions.AFTER)
+        )
+        #: search for node before
+        self.assertEqual(
+            None, self.linked_list.search("does not exist", position=SearchPositions.BEFORE)
+        )
+
     def test_delete(self):
         self.assertEqual(0, self.linked_list.size())
         self.linked_list.insert(self.data)
         self.assertEqual(1, self.linked_list.size())
+        self.assertListEqual([1], self.linked_list.to_array())
         self.linked_list.delete(self.data)
         self.assertEqual(0, self.linked_list.size())
+        self.assertListEqual([], self.linked_list.to_array())
         self.assertEqual(None, self.linked_list.get_head())
+
+        #: use a bigger list
+        self.assertEqual(0, self.linked_list.size())
+        self.linked_list.push(self.data)
+        self.linked_list.append(2)
+        self.linked_list.insert(3, position=InsertPositions.AFTER, reference_value=self.data)
+        self.linked_list.insert(4, position=InsertPositions.BEFORE, reference_value=self.data)
+        self.assertEqual(4, self.linked_list.size())
+        self.assertListEqual([4, 1, 3, 2], self.linked_list.to_array())
+
+        #: delete 1
+        self.linked_list.delete(self.data)
+        self.assertEqual(3, self.linked_list.size())
+        self.assertListEqual([4, 3, 2], self.linked_list.to_array())
+        self.assertEqual(3, self.linked_list.get_head().get_next().get_data())
+
+        #: delete 4; head of the list
+        self.linked_list.delete(4)
+        self.assertEqual(2, self.linked_list.size())
+        self.assertListEqual([3, 2], self.linked_list.to_array())
+        self.assertEqual(3, self.linked_list.get_head().get_data())
+        self.assertEqual(2, self.linked_list.get_head().get_next().get_data())
+        self.assertEqual(None, self.linked_list.get_tail().get_next())
+
+        #: delete 2; tail of the list
+        self.linked_list.delete(2)
+        self.assertEqual(1, self.linked_list.size())
+        self.assertListEqual([3], self.linked_list.to_array())
+        self.assertEqual(3, self.linked_list.get_head().get_data())
+        self.assertEqual(None, self.linked_list.get_head().get_next())
+        self.assertEqual(None, self.linked_list.get_tail().get_next())
