@@ -11,7 +11,7 @@ class CircularDoublyLinkedList(DoublyLinkedList):
     previous node.
 
     """
-    circular = False
+    circular = True
 
 
 class CircularSinglyLinkedList(SinglyLinkedList):

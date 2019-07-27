@@ -257,6 +257,13 @@ class DoublyLinkedListTests(unittest.TestCase):
         self.assertEqual(4, self.linked_list.size())
         self.assertListEqual([4, 1, 3, 2], self.linked_list.to_array())
 
+        #: delete a non-existent item
+        self.linked_list.delete("non-existent")
+        self.assertEqual(4, self.linked_list.size())
+        self.assertListEqual([4, 1, 3, 2], self.linked_list.to_array())
+        self.assertEqual(4, self.linked_list.get_head().get_data())
+        self.assertEqual(2, self.linked_list.get_tail().get_data())
+
         #: delete 1
         self.linked_list.delete(self.data)
         self.assertEqual(3, self.linked_list.size())

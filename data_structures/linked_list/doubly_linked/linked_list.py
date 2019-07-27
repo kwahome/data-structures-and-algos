@@ -70,19 +70,23 @@ class DoublyLinkedList(LinkedList):
         if self.is_empty():
             return self.initialize(node=new_node)
 
-        node_before = self.search(data=reference_value, position=SearchPositions.BEFORE)
-        if node_before:
-            #: if node with reference_value is found, set new_node as it's next node
+        reference_node = self.search(data=reference_value)
+        if reference_node and reference_node.get_previous():
+            #: if node with reference_value is found, set new_node as it's previous node
             #: no need to reset list tail as new node is inserted before another node
             #: because even in the event that that node was the tail, it will not be
             #: displaced from it's position
-            new_node.set_next(node_before.get_next())
+            node_before = reference_node.get_previous()
+            new_node.set_next(reference_node)
             new_node.set_previous(node_before)
-            node_before.get_next().set_previous(new_node)
+            reference_node.set_previous(new_node)
             node_before.set_next(new_node)
+            if reference_node is self.get_head():
+                self.set_head(new_node)
         else:
             #: if node with reference_value is not found, default to inserting to the front of the
             #: linked list as it's a constant time operation
+            #: also if the reference node is the head of the linked list
             self.insert(data, position=InsertPositions.BEGINNING)
 
     def _insert_after(self, data, reference_value):
@@ -242,14 +246,20 @@ class DoublyLinkedList(LinkedList):
         :param data: item to look for in the linked list
         :return: node holding the data item
         """
-        current = self.head
-        found = False
-        while current and found is False:
+
+        head = self.get_head()
+        current, found, result = head, False, None
+        #: while taking care to ensure that we are not circling back
+        #: in a circular linked list hence iterating infinitely
+        while not found and current:
             if current.get_data() == data:
-                found = True
-            else:
-                current = current.get_next()
-        return current
+                result, found = current, True
+                break
+            previous, current = current, current.get_next()
+            #: how we know we have circled back in a circular linked list
+            if not found and current is head:
+                current = None
+        return result
 
     def _node_after(self, data):
         """Method to traverse through a linked list whilst looking for the node with the data item
@@ -312,26 +322,35 @@ class DoublyLinkedList(LinkedList):
         :return:
         """
         previous = None
-        current = self.search(data)
-        if current:
-            previous = current.get_previous()
+        node = self.search(data)
+        if node:
+            previous = node.get_previous()
 
-        next_node = current.get_next()
-        if not previous:
-            self.head = next_node
+        #: can't delete a node if it does not exist
+        if not node:
+            return
+
+        next_node = node.get_next()
+        if node == next_node:
+            self.set_head(None)
+            self.set_tail(None)
+            return
 
         if previous:
             previous.set_next(next_node)
 
-        if current and next_node:
+        if not previous or node is self.get_head():
+            self.set_head(next_node)
+
+        if node and next_node:
             next_node.set_previous(previous)
 
         #: if we have just deleted the last node
-        if not next_node:
+        if not next_node or node is self.get_tail():
             self.set_tail(previous)
 
-        #: since this is the entry point for all delete operations, we want to control the list's
+        #: since this is the entry point for all delete operations we want to control the list's
         #: circular property on deletion from this point by setting the tail node's next pointer
-        #: to the head node after every insert operation and the head node's
+        # to the head node after every delete operation
         if self.circular:
             self.make_circular()
