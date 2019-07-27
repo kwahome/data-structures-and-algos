@@ -12,7 +12,7 @@ class Node(BaseNode):
         - a pointer to the next node
     """
 
-    def __init__(self, data=None, previous_node=None, next_node=None ):
+    def __init__(self, data=None, previous_node=None, next_node=None):
         super(Node, self).__init__(data=data, next_node=next_node)
         self.previous = previous_node
 
@@ -35,7 +35,24 @@ class Node(BaseNode):
 class DoublyLinkedList(LinkedList):
     """Doubly linked list that can only be traversed in a forward direction.
 
+    A doubly linked list could also be circularly linked where the last node
+    points to the head node as it's next node and the head node point's to
+    the last node as it's previous node.
+
     """
+    circular = False  #: boolean flag indicating whether the linked list is circular
+
+    def make_circular(self):
+        """Method to circularly link a doubly linked list.
+
+        :return:
+        """
+        if self.get_head():
+            self.get_head().set_previous(self.get_tail())
+
+        if self.get_tail():
+            self.get_tail().set_next(self.get_head())
+
     def _insert_before(self, data, reference_value):
         """Method to insert a node before the node with the `reference_value` in the linked list.
 
@@ -49,14 +66,16 @@ class DoublyLinkedList(LinkedList):
         """
         new_node = Node(data=data)
 
-        #: if linked list is empty, reference_value won't exist hence set new_node as head
+        #: if linked list is empty, reference_value won't exist hence initialize with node
         if self.is_empty():
-            self.set_head(new_node)
-            return
+            return self.initialize(node=new_node)
 
         node_before = self.search(data=reference_value, position=SearchPositions.BEFORE)
         if node_before:
             #: if node with reference_value is found, set new_node as it's next node
+            #: no need to reset list tail as new node is inserted before another node
+            #: because even in the event that that node was the tail, it will not be
+            #: displaced from it's position
             new_node.set_next(node_before.get_next())
             new_node.set_previous(node_before)
             node_before.get_next().set_previous(new_node)
@@ -78,10 +97,9 @@ class DoublyLinkedList(LinkedList):
         :return:
         """
         new_node = Node(data=data)
-        #: if linked list is empty, reference_value won't exist hence set new_node as head
+        #: if linked list is empty, reference_value won't exist hence initialize with node
         if self.is_empty():
-            self.set_head(new_node)
-            return
+            return self.initialize(node=new_node)
 
         reference_node = self.search(data=reference_value)
         if reference_node:
@@ -92,6 +110,11 @@ class DoublyLinkedList(LinkedList):
             if next_node:
                 next_node.set_previous(new_node)
             reference_node.set_next(new_node)
+
+            #: we need to reset the list's tail as new node is inserted after the reference
+            #: node which is displaced from it's position as the last node in the list
+            if reference_node is self.get_tail():
+                self.set_tail(new_node)
         else:
             #: if node with reference_value is not found, default to inserting to the front of the
             #: linked list as it's a constant time operation
@@ -119,6 +142,10 @@ class DoublyLinkedList(LinkedList):
         #: set the new node as the head of the list
         self.set_head(new_node)
 
+        #: set the tail of the list if it was an empty list
+        if not self.get_tail() or not self.get_head().get_next():
+            self.set_tail(new_node)
+
     def _insert_end(self, data, reference_value=None):
         """Method to insert a node at the end of the linked list.
 
@@ -132,13 +159,14 @@ class DoublyLinkedList(LinkedList):
         """
         #: create node with data
         new_node = Node(data=data)
-        #: change previous of current head node to point to the new node
+        #: if linked list is empty, reference_value won't exist hence initialize with node
         if self.is_empty():
-            self.set_head(new_node)
-            return
+            return self.initialize(node=new_node)
         tail = self.get_tail()
         new_node.set_previous(tail)
         tail.set_next(new_node)
+        #: set new node as the tail of the list
+        self.set_tail(new_node)
 
     def insert(self, data, position=InsertPositions.BEGINNING, reference_value=None):
         """Method to positionally insert a node into the linked list.
@@ -156,6 +184,12 @@ class DoublyLinkedList(LinkedList):
         getattr(self, "_insert_{}".format(position.lower()), self._insert_beginning)(
             data, reference_value
         )
+        #: since this is the entry point for all inserts; push, append, insert before and after,
+        #: we want to control the list's circular property on insert from this point by setting
+        #: the tail node's next pointer to the head node after every insert operation and the
+        #: head node's
+        if self.circular:
+            self.make_circular()
 
     def push(self, data):
         """Method to insert a node at the beginning of a linked list; hence the semantics.
@@ -291,3 +325,13 @@ class DoublyLinkedList(LinkedList):
 
         if current and next_node:
             next_node.set_previous(previous)
+
+        #: if we have just deleted the last node
+        if not next_node:
+            self.set_tail(previous)
+
+        #: since this is the entry point for all delete operations, we want to control the list's
+        #: circular property on deletion from this point by setting the tail node's next pointer
+        #: to the head node after every insert operation and the head node's
+        if self.circular:
+            self.make_circular()

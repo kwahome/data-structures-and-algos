@@ -1,9 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from data_structures.linked_list import BaseNode, InsertPositions, LinkedList, SearchPositions
+
+from data_structures.linked_list.doubly_linked import DoublyLinkedList
+from data_structures.linked_list.singly_linked import SinglyLinkedList
 
 
-class CircularLinkedList(LinkedList):
-    """Singly linked list that can only be traversed in a forward direction.
+class CircularDoublyLinkedList(DoublyLinkedList):
+    """Circular doubly linked list. The last node points to the head node
+    as it's next node and the head node point's to the last node as it's
+    previous node.
 
     """
+    circular = False
+
+
+class CircularSinglyLinkedList(SinglyLinkedList):
+    """Circular singly linked list. The last node points to the head node
+    as it's next node.
+
+    """
+    circular = True

@@ -84,8 +84,9 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
     """Linked list base defining a head.
 
     """
-    def __init__(self, head=None):
+    def __init__(self, head=None, tail=None):
         self.head = head
+        self.tail = tail
 
     def get_head(self):
         """Getter for the linked list head node.
@@ -102,6 +103,34 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
         """
         self.head = node
 
+    def get_tail(self):
+        """Getter for the linked list head node.
+
+        :return: node at head
+        """
+        return self.tail
+
+    def set_tail(self, node):
+        """Setter for the linked list head node.
+
+        :param node: node at head of linked list
+        :return:
+        """
+        self.tail = node
+
+    def initialize(self, node):
+        """Method to initialize empty linked list.
+
+        It sets both `head` and `tail` as `node` supplied.
+
+        :param node: node to initialize a linked list with
+        :return:
+        """
+        #: set new node as the head of the list
+        self.set_head(node=node)
+        #: set new node as the tail of the list
+        self.set_tail(node=node)
+
     def is_empty(self):
         """Method to check whether a linked list is empty.
 
@@ -109,17 +138,16 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
 
         :return: True or False
         """
-        return self.head is None
+        return self.get_head() is None
 
-    def get_tail(self):
-        """Method to seek and return the last node in the linked list (tail).
+    def is_circular(self):
+        """Method to check whether a linked list is empty.
 
-        :return: last node in the linked list
+        A linked list will be empty if it has no head as it must always start from the head.
+
+        :return: True or False
         """
-        last_node = self.head
-        while last_node and last_node.get_next():
-            last_node = last_node.get_next()
-        return last_node
+        return not self.is_empty() and self.get_head() == self.get_tail().get_next()
 
     def size(self):
         """Method to determine the number of nodes in a linked list.
@@ -132,35 +160,55 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
         The time complexity of size is O(n) because each time the method is called it will always
         visit every node in the list but only interact with them once, so n * 1 operations.
 
+        Because a linked list could be circularly linked (for both singly and doubly linked), we
+        want to stop when we hit the last node that does not give us the head node as it's next
+        node.
+
         :return: number of nodes found
         """
-        current = self.head
-        count = 0
-        while current:
+        head, count = self.get_head(), 0
+        node, end = head, False
+        #: while taking care to ensure that we are not circling back
+        #: in a circular linked list hence iterating infinitely
+        while not end and node:
             count += 1
-            current = current.get_next()
+            node = node.get_next()
+            if node is head:
+                end = True
         return count
 
     def to_array(self):
         """Method to traverse linked list and return an array of all it's items.
 
+        Because a linked list could be circularly linked (for both singly and doubly linked), we
+        want to stop when we hit the last node that does not give us the head node as it's next
+        node.
+
         :return: array
         """
         array = []
-        current = self.head
+        current = head = self.get_head()
         while current:
             array.append(current.get_data())
+            if current.get_next() is head:
+                break
             current = current.get_next()
         return array
 
     def traverse(self):
         """Method to traverse linked list and print out all it's items.
 
+        Because a linked list could be circularly linked (for both singly and doubly linked), we
+        want to stop when we hit the last node that does not give us the head node as it's next
+        node.
+
         :return:
         """
-        current = self.head
+        current = head = self.get_head()
         while current:
             print(current.get_data())
+            if current.get_next() is head:
+                break
             current = current.get_next()
 
     @abc.abstractmethod

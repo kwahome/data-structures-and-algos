@@ -16,10 +16,12 @@ class SinglyLinkedListTests(unittest.TestCase):
         #: insert positionally after in an empty linked list defaults operation to beginning of list
         self.position = InsertPositions.AFTER
         self.assertEqual(0, self.linked_list.size())
+        self.assertFalse(self.linked_list.is_circular())
         self.linked_list.insert(self.data, position=self.position)
         self.assertEqual(1, self.linked_list.size())
         self.assertEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([1], self.linked_list.to_array())
+        self.assertFalse(self.linked_list.is_circular())
 
         #: insert another item after the first item
         #: we don't expect inserted item at head of the list
@@ -28,6 +30,7 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertEqual(2, self.linked_list.size())
         self.assertNotEqual(self.data, self.linked_list.get_head().get_data())
         self.assertListEqual([1, 2], self.linked_list.to_array())
+        self.assertFalse(self.linked_list.is_circular())
 
         #: insert another item after the a non-present item defaults operation to beginning of list
         #: we expect inserted item at head of the list
@@ -110,6 +113,7 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertEqual(0, self.linked_list.size())
         self.linked_list.insert(self.data)
         self.assertEqual(1, self.linked_list.size())
+        self.assertListEqual([1], self.linked_list.to_array())
         self.assertEqual(self.data, self.linked_list.search(self.data).get_data())
         #: no node before, inserted item at head of list
         self.assertEqual(None, self.linked_list.search(self.data, position=SearchPositions.BEFORE))
@@ -169,9 +173,18 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertEqual(4, self.linked_list.size())
         self.assertListEqual([4, 1, 3, 2], self.linked_list.to_array())
 
+        #: delete a non-existent item
+        self.linked_list.delete("non-existent")
+        self.assertEqual(4, self.linked_list.size())
+        self.assertListEqual([4, 1, 3, 2], self.linked_list.to_array())
+        self.assertEqual(4, self.linked_list.get_head().get_data())
+        self.assertEqual(2, self.linked_list.get_tail().get_data())
+
         #: delete 1
         self.linked_list.delete(self.data)
         self.assertEqual(3, self.linked_list.size())
+        self.assertEqual(4, self.linked_list.get_head().get_data())
+        self.assertEqual(2, self.linked_list.get_tail().get_data())
         self.assertListEqual([4, 3, 2], self.linked_list.to_array())
         self.assertEqual(3, self.linked_list.get_head().get_next().get_data())
 
@@ -180,6 +193,7 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertEqual(2, self.linked_list.size())
         self.assertListEqual([3, 2], self.linked_list.to_array())
         self.assertEqual(3, self.linked_list.get_head().get_data())
+        self.assertEqual(2, self.linked_list.get_tail().get_data())
         self.assertEqual(2, self.linked_list.get_head().get_next().get_data())
         self.assertEqual(None, self.linked_list.get_tail().get_next())
 
@@ -188,5 +202,6 @@ class SinglyLinkedListTests(unittest.TestCase):
         self.assertEqual(1, self.linked_list.size())
         self.assertListEqual([3], self.linked_list.to_array())
         self.assertEqual(3, self.linked_list.get_head().get_data())
+        self.assertEqual(3, self.linked_list.get_tail().get_data())
         self.assertEqual(None, self.linked_list.get_head().get_next())
         self.assertEqual(None, self.linked_list.get_tail().get_next())
