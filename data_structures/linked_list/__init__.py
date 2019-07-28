@@ -84,6 +84,8 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
     """Linked list base defining a head.
 
     """
+    visual_pointer = "->"
+
     def __init__(self, head=None, tail=None):
         self.head = head
         self.tail = tail
@@ -186,13 +188,13 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
 
         :return: array
         """
-        array = []
-        current = head = self.get_head()
-        while current:
-            array.append(current.get_data())
-            if current.get_next() is head:
-                break
-            current = current.get_next()
+        array, end = [], False
+        node = head = self.get_head()
+        while not end and node:
+            array.append(node.get_data())
+            node = node.get_next()
+            if node is head:
+                end = True
         return array
 
     def traverse(self):
@@ -204,12 +206,31 @@ class LinkedList(six.with_metaclass(abc.ABCMeta)):
 
         :return:
         """
-        current = head = self.get_head()
-        while current:
-            print(current.get_data())
-            if current.get_next() is head:
-                break
-            current = current.get_next()
+        end = False
+        node = head = self.get_head()
+        flattened = ""
+        while not end and node:
+            flattened = flattened + "[{}]".format(node.get_data())
+            node = node.get_next()
+            if node is head:
+                end = True
+            if node:
+                flattened = flattened + self.visual_pointer
+        return flattened
+
+    def forward_traversal(self):
+        """Method to traverse a linked list in a forward direction
+
+        :return:
+        """
+        return self.traverse()
+
+    def reverse_traversal(self):
+        """Method to traverse a linked list in a reverse direction
+
+        :return:
+        """
+        pass
 
     @abc.abstractmethod
     def insert(self, data, position=InsertPositions.BEGINNING, reference_value=None):

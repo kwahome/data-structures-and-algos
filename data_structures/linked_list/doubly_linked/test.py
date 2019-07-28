@@ -1,7 +1,7 @@
 import unittest
 
 from data_structures.linked_list import InsertPositions, SearchPositions
-from data_structures.linked_list.doubly_linked import DoublyLinkedList
+from data_structures.linked_list.doubly_linked import DoublyLinkedList, Node
 
 
 class DoublyLinkedListTests(unittest.TestCase):
@@ -11,6 +11,85 @@ class DoublyLinkedListTests(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def test_get_head(self):
+        self.assertEqual(None, self.linked_list.get_head())
+        self.linked_list.insert(self.data)
+        self.assertEqual(self.data, self.linked_list.get_head().get_data())
+
+    def test_set_head(self):
+        node = Node(data=self.data)
+        self.assertEqual(None, self.linked_list.get_head())
+        self.linked_list.set_head(node=node)
+        self.assertEqual(node, self.linked_list.get_head())
+
+    def test_get_tail(self):
+        self.assertEqual(None, self.linked_list.get_tail())
+        self.linked_list.insert(self.data)
+        self.assertEqual(self.data, self.linked_list.get_tail().get_data())
+
+    def test_set_tail(self):
+        node = Node(data=self.data)
+        self.assertEqual(None, self.linked_list.get_tail())
+        self.linked_list.set_tail(node=node)
+        self.assertEqual(node, self.linked_list.get_tail())
+
+    def test_initialize(self):
+        node = Node(data=self.data)
+        self.assertEqual(None, self.linked_list.get_head())
+        self.assertEqual(None, self.linked_list.get_tail())
+        self.linked_list.initialize(node=node)
+        self.assertEqual(node, self.linked_list.get_head())
+        self.assertEqual(node, self.linked_list.get_tail())
+
+    def test_is_empty(self):
+        node = Node(data=self.data)
+        self.assertTrue(self.linked_list.is_empty())
+        self.linked_list.initialize(node=node)
+        self.assertFalse(self.linked_list.is_empty())
+
+    def test_making_circular(self):
+        node = Node(data=self.data)
+        self.assertFalse(self.linked_list.is_circular())
+        self.linked_list.initialize(node=node)
+        self.linked_list.make_circular()
+        self.assertTrue(self.linked_list.is_circular())
+
+    def test_size(self):
+        node = Node(data=self.data)
+        self.assertEqual(0, self.linked_list.size())
+        self.linked_list.initialize(node=node)
+        self.assertEqual(1, self.linked_list.size())
+
+    def test_to_array(self):
+        node = Node(data=self.data)
+        self.assertEqual([], self.linked_list.to_array())
+        self.linked_list.initialize(node=node)
+        self.assertEqual([1], self.linked_list.to_array())
+
+    def test_traverse(self):
+        node = Node(data=self.data)
+        self.assertEqual("", self.linked_list.traverse())
+        self.linked_list.initialize(node=node)
+        self.assertEqual("[{}]".format(self.data), self.linked_list.traverse())
+        self.linked_list.insert(2)
+        self.assertEqual("[{}]<->[{}]".format(2, self.data), self.linked_list.traverse())
+
+    def test_forward_traversal(self):
+        node = Node(data=self.data)
+        self.assertEqual("", self.linked_list.forward_traversal())
+        self.linked_list.initialize(node=node)
+        self.assertEqual("[{}]".format(self.data), self.linked_list.forward_traversal())
+        self.linked_list.insert(2)
+        self.assertEqual("[{}]<->[{}]".format(2, self.data), self.linked_list.forward_traversal())
+
+    def test_reverse_traversal(self):
+        node = Node(data=self.data)
+        self.assertEqual("", self.linked_list.reverse_traversal())
+        self.linked_list.initialize(node=node)
+        self.assertEqual("[{}]".format(self.data), self.linked_list.reverse_traversal())
+        self.linked_list.insert(2)
+        self.assertEqual("[{}]<->[{}]".format(self.data, 2), self.linked_list.reverse_traversal())
 
     def test_inserting_after(self):
         #: insert positionally after in an empty linked list defaults operation to beginning of list

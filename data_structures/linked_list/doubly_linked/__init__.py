@@ -1,1 +1,1 @@
-from .linked_list import DoublyLinkedList
+from .linked_list import DoublyLinkedList, Node

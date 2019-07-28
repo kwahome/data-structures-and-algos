@@ -41,6 +41,7 @@ class DoublyLinkedList(LinkedList):
 
     """
     circular = False  #: boolean flag indicating whether the linked list is circular
+    visual_pointer = "<->"
 
     def make_circular(self):
         """Method to circularly link a doubly linked list.
@@ -301,6 +302,22 @@ class DoublyLinkedList(LinkedList):
         :return: node holding the data item
         """
         return getattr(self, "_node_{}".format(position.lower()), self._node_with)(data)
+
+    def reverse_traversal(self):
+        """Method to traverse a linked list in a reverse direction
+
+        :return:
+        """
+        end, flattened = False, ""
+        node = tail = self.get_tail()
+        while not end and node:
+            flattened = flattened + "[{}]".format(node.get_data())
+            node = node.get_previous()
+            if node is tail:
+                end = True
+            if node:
+                flattened = flattened + self.visual_pointer
+        return flattened
 
     def delete(self, data):
         """Method to traverse through a linked list whilst looking for an item to delete it.
