@@ -11,14 +11,26 @@ class BinaryTreeTests(unittest.TestCase):
         pass
 
     def test_tree_insert(self):
-        parent_value = 5
+        data = 5
         self.assertEqual(None, self.binary_tree.get_data())
-        self.binary_tree.insert(parent_value)
-        self.assertEqual(parent_value, self.binary_tree.get_data())
-        left_child = 1
-        self.binary_tree.insert(left_child)
-        self.assertEqual(left_child, self.binary_tree.get_left().get_data())
-        right_child = 10
-        self.binary_tree.insert(right_child)
-        self.assertEqual(right_child, self.binary_tree.get_right().get_data())
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_data())
+        data = 2
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_left().get_data())
+        data = 1
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_left().get_left().get_data())
+        data = 3
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_left().get_right().get_data())
+        data = 10
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_right().get_data())
+        data = 15
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_right().get_right().get_data())
+        data = 9
+        self.binary_tree.insert(data)
+        self.assertEqual(data, self.binary_tree.get_right().get_left().get_data())
 
