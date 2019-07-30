@@ -1,37 +1,32 @@
-class Node:
-    """Class implementing a `node` in a tree
+from data_structures.tree_based import Node
 
-    Each tree node contains following parts:
-        - data
-        - a pointer to left child
-        - a pointer to right child
+
+class Tree(Node):
+    """Class implementing a binary tree
     """
 
-    def __init__(self, data):
-        self.left = None
-        self.right = None
-        self.data = data
-
     def insert(self, data):
-        #: compare the new value with the parent node
-        if self.data:
-            if data < self.data:
-                if self.left is None:
-                    self.left = Node(data)
+        parent = self.get_data()
+        if parent:
+            if data < parent:
+                left = self.get_left()
+                if left:
+                    left.insert(data)
                 else:
-                    self.left.insert(data)
-            elif data > self.data:
-                if self.right is None:
-                    self.right = Node(data)
+                    self.set_left(Tree(data))
+            elif data > parent:
+                right = self.get_right()
+                if right:
+                    right.insert(data)
                 else:
-                    self.right.insert(data)
+                    self.set_right(Tree(data))
         else:
-            self.data = data
+            self.set_data(data)
 
     def print_tree(self):
-        if self.left:
-            self.left.print_tree()
-        print(self.data),
-        if self.right:
-            self.right.print_tree()
-
+        left, right = self.get_left(), self.get_right()
+        if left:
+            left.print_tree()
+        print(self.get_data())
+        if right:
+            right.print_tree()
